@@ -12,13 +12,26 @@ fi
 
 # clears the output file
 if [[ $# > 1 ]]; then
-	echo "" > $2
+	echo > $2
 fi
 
-OSCRepos=`curl https://api.github.com/orgs/OSC/repos | jq -r '.[] | .full_name'`
-AweSimRepos=`curl https://api.github.com/orgs/AweSim-OSC/repos | jq -r '.[] | .full_name'`
-SlackSubs=`cat ./subscribed.txt`
-Unsubbed=""
+i=1
+tmp=`curl https://api.github.com/orgs/OSC/repos?page=$i | jq -r '.[] | .full_name'`
+until [[ $tmp == "" ]]; do
+	OSCRepos+="$tmp
+	"
+	i=$(( i + 1 ))
+	tmp=`curl https://api.github.com/orgs/OSC/repos?page=$i | jq -r '.[] | .full_name'`
+done
+
+i=1
+tmp=`curl https://api.github.com/orgs/AweSim-OSC/repos?page=$i | jq -r '.[] | .full_name'`
+until [[ $tmp == "" ]]; do
+        AweSimRepos+="$tmp
+	"
+        i=$(( i + 1 ))
+        tmp=`curl https://api.github.com/orgs/AweSim-OSC/repos?page=$i | jq -r '.[] | .full_name'`
+done
 
 for OSCRepo in $OSCRepos; do
 	if ! grep $OSCRepo ./subscribed.txt > /dev/null; then
@@ -34,7 +47,7 @@ for AweSimRepo in $AweSimRepos; do
 	fi
 done
 
-if [ Unsubbed == "" ]; then
+if [[ $Unsubbed == "" ]]; then
 	echo "All repos subscribed"
 else
 	echo "These repos are unsubscribed:"
