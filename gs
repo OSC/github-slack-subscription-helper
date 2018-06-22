@@ -1,19 +1,4 @@
 #!/bin/bash
-# reads from ./subscribed.txt
-# make sure this file has Linux line delimeters!
-# run this solo, or optionally output subscribe commands to a file
-# gs [add <FILENAME>]
-
-
-if [[ $# > 1 && $1 != "add" ]]; then
-	echo "Only available option is add [FILENAME]. Got $1"
-	exit 1
-fi
-
-# clears the output file
-if [[ $# > 1 ]]; then
-	echo > $2
-fi
 
 i=1
 tmp=`curl https://api.github.com/orgs/OSC/repos?page=$i | jq -r '.[] | .full_name'`
@@ -56,8 +41,10 @@ else
 	done
 fi
 
-if [[ $# > 1 ]]; then
-	for i in $Unsubbed; do
-		echo "/github subscribe $i" >> $2
-	done
-fi
+echo
+echo "To subscribe to these repos, enter the following commands in the Slack channel:"
+
+for i in $Unsubbed; do
+	echo "/github subscribe $i"
+done
+
