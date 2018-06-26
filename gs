@@ -39,12 +39,10 @@ else
 	for i in $Unsubbed; do
 		echo $i
 	done
+	echo
+
+	echo "To subscribe to these repos, enter the following commands in the Slack channel:"
+	for i in $Unsubbed; do
+		echo "/github subscribe $i"
+	done
 fi
-
-echo
-echo "To subscribe to these repos, enter the following commands in the Slack channel:"
-
-for i in $Unsubbed; do
-	echo "/github subscribe $i"
-done
-
