@@ -19,14 +19,14 @@ until [[ $tmp == "" ]]; do
 done
 
 for OSCRepo in $OSCRepos; do
-	if ! grep $OSCRepo ./subscribed.txt > /dev/null; then
+	if ! grep -x $OSCRepo ./subscribed.txt > /dev/null; then
 		Unsubbed+=`echo "$OSCRepo
 		"`
 	fi
 done
 
 for AweSimRepo in $AweSimRepos; do
-	if ! grep $AweSimRepo ./subscribed.txt > /dev/null; then
+	if ! grep -x $AweSimRepo ./subscribed.txt > /dev/null; then
 		Unsubbed+=`echo "$AweSimRepo
 		"`
 	fi
